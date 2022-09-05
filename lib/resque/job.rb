@@ -48,7 +48,7 @@ module Resque
     def self.decode(object)
       Resque.decode(object)
     end
-    
+
     # Given a word with dashes, returns a camel cased version of it.
     def classify(dashed_word)
       Resque.classify(dashed_word)
@@ -156,6 +156,7 @@ module Resque
         # Execute before_perform hook. Abort the job gracefully if
         # Resque::DontPerform is raised.
         begin
+          binding.pry
           before_hooks.each do |hook|
             job.send(hook, *job_args)
           end
@@ -165,11 +166,13 @@ module Resque
 
         # Execute the job. Do it in an around_perform hook if available.
         if around_hooks.empty?
+          binding.pry
           job.perform(*job_args)
           job_was_performed = true
         else
           # We want to nest all around_perform plugins, with the last one
           # finally calling perform
+          binding.pry
           stack = around_hooks.reverse.inject(nil) do |last_hook, hook|
             if last_hook
               lambda do
@@ -190,9 +193,11 @@ module Resque
 
         # Execute after_perform hook
         after_hooks.each do |hook|
+          binding.pry
           job.send(hook, *job_args)
         end
 
+        binding.pry
         # Return true if the job was performed
         return job_was_performed
 
