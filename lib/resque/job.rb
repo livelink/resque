@@ -152,6 +152,14 @@ module Resque
       job_args = args || []
       job_was_performed = false
 
+      unless job == ActiveJob::QueueAdapters::ResqueAdapter::JobWrapper
+        if job < ApplicationJob
+          before_hooks.delete('before_perform')
+          around_hooks.delete('around_perform')
+          after_hooks.delete('after_perform')
+        end
+      end
+
       begin
         # Execute before_perform hook. Abort the job gracefully if
         # Resque::DontPerform is raised.

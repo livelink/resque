@@ -1,0 +1,34 @@
+Reports::NewUserSignUpJob < ApplicationJob
+
+# Reports::NewUserSignUpJob.perform_later({})
+[1] pry(#<Resque::Job>)> payload
+=> {"class"=>"ActiveJob::QueueAdapters::ResqueAdapter::JobWrapper",
+ "args"=>
+  [{"job_class"=>"Reports::NewUserSignUpJob",
+    "job_id"=>"efa660d2-2753-4691-98e9-a14f4e9ede4a",
+    "provider_job_id"=>nil,
+    "queue_name"=>"reports",
+    "priority"=>nil,
+    "arguments"=>[{"_aj_symbol_keys"=>[]}],
+    "executions"=>0,
+    "exception_executions"=>{},
+    "locale"=>"en",
+    "timezone"=>"UTC",
+    "enqueued_at"=>"2022-09-07T14:48:51Z"}]}
+
+# before_hooks = []
+# after_hooks = ["after_perform_with_honeybadger"]
+# around_hooks = ["around_perform_with_honeybadger"]
+
+------
+
+#Resque.enqueue(Reports::NewUserSignUpJob, {})
+[1] pry(#<Resque::Job>)> payload
+    => {"class"=>"Reports::NewUserSignUpJob", "args"=>[{}]}
+
+# [1] pry(#<Resque::Job>)> around_hooks
+# => ["around_perform", "around_perform_with_honeybadger"]
+# [2] pry(#<Resque::Job>)> before_hooks
+# => ["before_perform"]
+# [3] pry(#<Resque::Job>)> after_hooks
+# => ["after_perform", "after_perform_with_honeybadger"]
